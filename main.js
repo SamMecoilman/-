@@ -3,7 +3,7 @@ const channelId = 'UCSgIKM0G8Exo3UgZF0MAsdg'; // 新しいチャンネルID
 
 // YouTube Data APIを使ってチャンネルの動画の情報を取得する関数
 async function fetchChannelVideos() {
-    const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=20`;
+    const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=10`; // maxResultsを減らす
     try {
         const response = await axios.get(apiUrl);
         if (response.data.items.length === 0) {
@@ -31,32 +31,44 @@ async function fetchVideoData(videoId) {
 const videoListContainer = document.getElementById('videoList');
 
 async function loadVideos() {
-    const videos = await fetchChannelVideos();
+    // ローカルストレージからキャッシュを取得
+    let cachedVideos = localStorage.getItem('cachedVideos');
+    if (cachedVideos) {
+        cachedVideos = JSON.parse(cachedVideos);
+        console.log('Using cached data');
+        displayVideos(cachedVideos);
+    } else {
+        const videos = await fetchChannelVideos();
+        displayVideos(videos);
+        // キャッシュをローカルストレージに保存
+        localStorage.setItem('cachedVideos', JSON.stringify(videos));
+    }
+}
+
+function displayVideos(videos) {
     for (let i = 0; i < videos.length; i++) {
         const video = videos[i];
         const videoId = video.id.videoId;
-        const videoData = await fetchVideoData(videoId);
-        if (videoData) {
-            const videoHtml = `
-                <div class="video-card">
-                    <div class="video-thumbnail">
-                        <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">
-                            <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="${videoData.snippet.title}">
-                        </a>
-                    </div>
-                    <div class="video-info">
-                        <h3>${videoData.snippet.title}</h3>
-                        <p>${videoData.snippet.description}</p>
-                        <p>👍 ${videoData.statistics.likeCount} | 👀 ${videoData.statistics.viewCount}</p>
-                        <div class="comments-section">
-                            <textarea placeholder="コメントを追加"></textarea>
-                            <div class="comments-list" id="comments-${videoId}"></div>
-                        </div>
+        const videoData = video.snippet;
+        const videoHtml = `
+            <div class="video-card">
+                <div class="video-thumbnail">
+                    <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">
+                        <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="${videoData.title}">
+                    </a>
+                </div>
+                <div class="video-info">
+                    <h3>${videoData.title}</h3>
+                    <p>${videoData.description}</p>
+                    <p>👍 ${videoData.likeCount || 'N/A'} | 👀 ${videoData.viewCount || 'N/A'}</p>
+                    <div class="comments-section">
+                        <textarea placeholder="コメントを追加"></textarea>
+                        <div class="comments-list" id="comments-${videoId}"></div>
                     </div>
                 </div>
-            `;
-            videoListContainer.innerHTML += videoHtml;
-        }
+            </div>
+        `;
+        videoListContainer.innerHTML += videoHtml;
     }
 }
 
