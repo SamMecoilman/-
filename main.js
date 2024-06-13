@@ -76,4 +76,17 @@ function displayVideos(videos) {
                     <p>👍 ${video.statistics.likeCount} | 👀 ${video.statistics.viewCount}</p>
                     <div class="comments-section">
                         <textarea placeholder="コメントを追加" data-video-id="${videoId}"></textarea>
-                        <
+                        <button onclick="addComment('${videoId}')">送信</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        videoListContainer.innerHTML += videoHtml;
+    }
+    loadManualVideos();
+}
+
+async function loadManualVideos() {
+    let manualVideos = JSON.parse(localStorage.getItem('manualVideos')) || [];
+    manualVideoListContainer.innerHTML = '';
+    for (let i = 0; i < manual
