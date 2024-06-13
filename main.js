@@ -1,11 +1,14 @@
 const apiKey = 'AIzaSyDGKMTmXMWQWAIABQecXvfgAinHbG8_BpA';
-const channelId = 'UCFj0mcjLB6uFuRko4fXh8GQ'; // サムのヘタレ英雄譚のチャンネルID
+const channelId = 'UCSgIKM0G8Exo3UgZF0MAsdg'; // 新しいチャンネルID
 
 // YouTube Data APIを使ってチャンネルの動画の情報を取得する関数
 async function fetchChannelVideos() {
     const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=20`;
     try {
         const response = await axios.get(apiUrl);
+        if (response.data.items.length === 0) {
+            console.warn('No videos found for the specified channel ID');
+        }
         return response.data.items;
     } catch (error) {
         console.error('Error fetching channel videos:', error);
