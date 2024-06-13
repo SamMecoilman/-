@@ -1,10 +1,44 @@
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    position: relative;
 }
 
 .header-image {
     width: 100%;
     height: auto;
+    max-height: 150px; /* ヘッダーの画像の高さを制限 */
+    object-fit: cover; /* 画像を枠に合わせてトリミング */
+}
+
+header h1 {
+    margin: 10px 0;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
 }
 
 .container {
@@ -12,16 +46,21 @@ body {
 }
 
 .video-card {
+    background-color: white;
     border: 1px solid #ccc;
+    border-radius: 5px;
     margin: 10px 0;
     padding: 10px;
+    display: flex;
+    flex-direction: row; /* 横並びにする */
 }
 
 .video-thumbnail {
     position: relative;
-    width: 100%;
-    padding-top: 56.25%;
+    width: 40%; /* サムネイルの幅を40%に設定 */
+    padding-top: 22.5%; /* アスペクト比を保持 */
     overflow: hidden;
+    margin-right: 20px; /* サムネイルと動画情報の間にスペースを追加 */
 }
 
 .video-thumbnail iframe {
@@ -61,6 +100,10 @@ body {
     }
 }
 
+.video-info {
+    width: 60%; /* 動画情報の幅を60%に設定 */
+}
+
 .comments-section {
     margin-top: 10px;
 }
@@ -68,9 +111,32 @@ body {
 .comments-section textarea {
     width: calc(100% - 60px);
     height: 50px;
+    margin-bottom: 10px;
 }
 
 .comments-section button {
     width: 50px;
     height: 50px;
+}
+
+#news {
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+#news h2 {
+    margin-top: 0;
+}
+
+#news ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#news ul li {
+    margin: 10px 0;
 }
