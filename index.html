@@ -13,9 +13,6 @@
         <h1>動画一覧</h1>
     </header>
     <main>
-        <div class="banner">
-            <p>ここにバナー広告を表示</p>
-        </div>
         <div class="container">
             <div id="news">
                 <h2>最新ニュース</h2>
@@ -28,38 +25,48 @@
                 <!-- ここに動画が追加されます -->
             </div>
         </div>
-        <div class="banner">
-            <p>ここにバナー広告を表示</p>
-        </div>
     </main>
     <script>
+        const apiKey = 'AIzaSyDGKMTmXMWQWAIABQecXvfgAinHbG8_BpA'; // 提供いただいたYouTube APIキー
+
         // YouTube Data APIを使って動画の情報を取得する関数
         async function fetchVideoData(videoId) {
-            const apiKey = 'AIzaSyDGKMTmXMWQWAIABQecXvfgAinHbG8_BpA'; // あなたのYouTube APIキーをここに入れます
             const apiUrl = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,statistics&key=${apiKey}`;
-            const response = await axios.get(apiUrl);
-            return response.data.items[0];
+            try {
+                const response = await axios.get(apiUrl);
+                return response.data.items[0];
+            } catch (error) {
+                console.error('Error fetching video data:', error);
+                return null;
+            }
         }
 
         // ローカルストレージから動画のURLを取得して動画一覧を表示
         const videos = JSON.parse(localStorage.getItem('videos')) || [];
         const videoListContainer = document.getElementById('videoList');
 
-        videos.forEach(async (videoUrl, index) => {
-            const videoId = getVideoIdFromUrl(videoUrl);
-            if (videoId) {
-                const videoData = await fetchVideoData(videoId);
-                const videoHtml = `
-                    <div class="video-card">
-                        <iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
-                        <h3>${videoData.snippet.title}</h3>
-                        <p>${videoData.snippet.description}</p>
-                        <p>いいね: ${videoData.statistics.likeCount} | 再生回数: ${videoData.statistics.viewCount}</p>
-                    </div>
-                `;
-                videoListContainer.innerHTML += videoHtml;
+        async function loadVideos() {
+            for (let i = 0; i < videos.length; i++) {
+                const videoUrl = videos[i];
+                const videoId = getVideoIdFromUrl(videoUrl);
+                if (videoId) {
+                    const videoData = await fetchVideoData(videoId);
+                    if (videoData) {
+                        const videoHtml = `
+                            <div class="video-card">
+                                <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+                                <div class="video-info">
+                                    <h3>${videoData.snippet.title}</h3>
+                                    <p>${videoData.snippet.description}</p>
+                                    <p>👍 ${videoData.statistics.likeCount} | 👀 ${videoData.statistics.viewCount}</p>
+                                </div>
+                            </div>
+                        `;
+                        videoListContainer.innerHTML += videoHtml;
+                    }
+                }
             }
-        });
+        }
 
         // YouTubeの動画URLから動画IDを抽出する関数
         function getVideoIdFromUrl(url) {
@@ -67,6 +74,9 @@
             const match = url.match(regExp);
             return (match && match[2].length === 11) ? match[2] : null;
         }
+
+        // ページ読み込み時に動画をロード
+        window.onload = loadVideos;
     </script>
 </body>
 </html>
