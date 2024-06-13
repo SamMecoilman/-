@@ -11,19 +11,37 @@
             padding: 0;
             background-color: #f4f4f4;
             color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         header {
             background-color: #333;
             color: #fff;
             padding: 1rem 0;
             text-align: center;
+            width: 100%;
         }
         main {
+            display: flex;
+            justify-content: center;
             padding: 1rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .banner {
+            background-color: #fff;
+            width: 15%;
+            min-width: 150px;
+            margin: 0 1rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            text-align: center;
         }
         .container {
             max-width: 800px;
-            margin: 0 auto;
+            width: 60%;
             background-color: #fff;
             padding: 1rem;
             border-radius: 8px;
@@ -40,6 +58,14 @@
             height: 315px;
             border: none;
         }
+        @media (max-width: 1200px) {
+            .container {
+                width: 70%;
+            }
+            .banner {
+                display: none; /* 小さい画面ではバナーを非表示にする */
+            }
+        }
         @media (max-width: 600px) {
             iframe {
                 height: 200px;
@@ -52,10 +78,16 @@
         <h1>動画一覧</h1>
     </header>
     <main>
+        <div class="banner">
+            <p>ここにバナー広告を表示</p>
+        </div>
         <div class="container">
             <div id="videoList">
                 <!-- ここに動画が追加されます -->
             </div>
+        </div>
+        <div class="banner">
+            <p>ここにバナー広告を表示</p>
         </div>
     </main>
     <script>
