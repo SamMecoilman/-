@@ -40,7 +40,9 @@ async function loadVideos() {
             const videoHtml = `
                 <div class="video-card">
                     <div class="video-thumbnail">
-                        <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+                        <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">
+                            <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="${videoData.snippet.title}">
+                        </a>
                     </div>
                     <div class="video-info">
                         <h3>${videoData.snippet.title}</h3>
