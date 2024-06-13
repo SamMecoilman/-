@@ -27,6 +27,7 @@ async function fetchVideoData(videoId) {
 }
 
 const videoListContainer = document.getElementById('videoList');
+const manualVideoListContainer = document.getElementById('manualVideoList');
 
 async function loadVideos() {
     const cacheExpirationTime = 24 * 60 * 60 * 1000;
@@ -47,9 +48,14 @@ async function loadVideos() {
     }
 
     const videos = await fetchChannelVideos();
-    displayVideos(videos);
-    localStorage.setItem('cachedVideos', JSON.stringify(videos));
-    localStorage.setItem('cacheTimestamp', new Date().getTime().toString());
+    if (videos.length > 0) {
+        displayVideos(videos);
+        localStorage.setItem('cachedVideos', JSON.stringify(videos));
+        localStorage.setItem('cacheTimestamp', new Date().getTime().toString());
+    } else {
+        // 手動で追加された動画を表示する
+        loadManualVideos();
+    }
 }
 
 function displayVideos(videos) {
@@ -63,31 +69,4 @@ function displayVideos(videos) {
                 <div class="video-thumbnail">
                     <iframe id="video-${videoId}" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
                     <div class="comment-overlay" id="overlay-${videoId}"></div>
-                </div>
-                <div class="video-info">
-                    <h3>${videoData.title}</h3>
-                    <p>${videoData.description}</p>
-                    <p>👍 ${videoData.likeCount || 'N/A'} | 👀 ${videoData.viewCount || 'N/A'}</p>
-                    <div class="comments-section">
-                        <textarea id="comment-input-${videoId}" placeholder="コメントを追加"></textarea>
-                        <button onclick="submitComment('${videoId}')">送信</button>
-                        <div class="comments-list" id="comments-${videoId}"></div>
-                    </div>
-                </div>
-            </div>
-        `;
-        videoListContainer.innerHTML += videoHtml;
-    }
-}
-
-window.onload = loadVideos;
-
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-        .then(registration => {
-            console.log('Service Worker registered with scope:', registration.scope);
-        })
-        .catch(error => {
-            console.error('Service Worker registration failed:', error);
-        });
-}
+                </div
