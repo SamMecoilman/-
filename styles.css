@@ -1,103 +1,35 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-}
-
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 1rem;
-    text-align: center;
 }
 
 .header-image {
     width: 100%;
-    max-width: 800px;
     height: auto;
-    display: block;
-    margin: 0 auto;
-}
-
-header nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 1rem 0 0;
-}
-
-header nav ul li {
-    display: inline;
-    margin-right: 1rem;
-}
-
-header nav ul li a {
-    color: #fff;
-    text-decoration: none;
-}
-
-.gallery-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 1rem;
-}
-
-.gallery-item {
-    background-color: #fff;
-    margin: 1rem;
-    padding: 1rem;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width: 200px;
-}
-
-.gallery-item img {
-    max-width: 100%;
-    height: auto;
-}
-
-.live-chat {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    width: 300px;
-    height: 400px;
 }
 
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem;
+    padding: 20px;
 }
 
 .video-card {
-    display: flex;
-    margin: 1rem 0;
-    background-color: #fff;
-    padding: 1rem;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+    margin: 10px 0;
+    padding: 10px;
 }
 
 .video-thumbnail {
-    flex: 1;
-    margin-right: 1rem;
     position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+    overflow: hidden;
 }
 
-.video-info {
-    flex: 2;
-}
-
-.comments-section {
-    margin-top: 1rem;
-}
-
-.comments-list {
-    max-height: 100px;
-    overflow-y: scroll;
-    border: 1px solid #ccc;
-    padding: 0.5rem;
+.video-thumbnail iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .comment-overlay {
@@ -111,55 +43,34 @@ header nav ul li a {
 
 .comment {
     position: absolute;
-    top: 0;
     white-space: nowrap;
+    color: white;
+    font-size: 1.2em;
+    text-shadow: 1px 1px 2px black;
     animation-name: slide;
     animation-timing-function: linear;
+    animation-iteration-count: infinite;
 }
 
 @keyframes slide {
-    0% {
-        left: 100%;
+    from {
+        transform: translateX(100%);
     }
-    100% {
-        left: -100%;
+    to {
+        transform: translateX(-100%);
     }
 }
 
-.upload-container {
-    max-width: 800px;
-    margin: 2rem auto;
-    background-color: #fff;
-    padding: 2rem;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
+.comments-section {
+    margin-top: 10px;
 }
 
-.drag-and-drop {
-    border: 2px dashed #ccc;
-    padding: 2rem;
-    margin-bottom: 1rem;
-    cursor: pointer;
+.comments-section textarea {
+    width: calc(100% - 60px);
+    height: 50px;
 }
 
-.drag-and-drop p {
-    margin: 0;
-}
-
-textarea {
-    width: 100%;
-    height: 100px;
-    margin-bottom: 1rem;
-}
-
-button {
-    padding: 1rem 2rem;
-    background-color: #333;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #555;
+.comments-section button {
+    width: 50px;
+    height: 50px;
 }
