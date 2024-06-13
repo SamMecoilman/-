@@ -1,4 +1,4 @@
-const apiKey = 'AIzaSyDGKMTmXMWQWAIABQecXvfgAinHbG8_BpA';
+const apiKey = 'AIzaSyC1imLgoRZLRhBn5qFGMXbcpQUK5VEagzY';
 const channelId = 'UCSgIKM0G8Exo3UgZF0MAsdg'; // 新しいチャンネルID
 
 // YouTube Data APIを使ってチャンネルの動画の情報を取得する関数
