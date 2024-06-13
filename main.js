@@ -1,9 +1,8 @@
 const apiKey = 'AIzaSyC1imLgoRZLRhBn5qFGMXbcpQUK5VEagzY';
 const channelId = 'UCSgIKM0G8Exo3UgZF0MAsdg'; // サムのヘタレ英雄譚のチャンネルID
 
-// YouTube Data APIを使ってチャンネルの動画の情報を取得する関数
 async function fetchChannelVideos() {
-    const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=10`; // maxResultsを減らす
+    const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=10`;
     try {
         const response = await axios.get(apiUrl);
         if (response.data.items.length === 0) {
@@ -16,7 +15,6 @@ async function fetchChannelVideos() {
     }
 }
 
-// YouTube Data APIを使って動画の情報を取得する関数
 async function fetchVideoData(videoId) {
     const apiUrl = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,statistics&key=${apiKey}`;
     try {
@@ -31,7 +29,6 @@ async function fetchVideoData(videoId) {
 const videoListContainer = document.getElementById('videoList');
 
 async function loadVideos() {
-    // キャッシュの有効期限を1日とする（ミリ秒）
     const cacheExpirationTime = 24 * 60 * 60 * 1000;
 
     let cachedVideos = localStorage.getItem('cachedVideos');
@@ -51,12 +48,12 @@ async function loadVideos() {
 
     const videos = await fetchChannelVideos();
     displayVideos(videos);
-    // キャッシュをローカルストレージに保存
     localStorage.setItem('cachedVideos', JSON.stringify(videos));
     localStorage.setItem('cacheTimestamp', new Date().getTime().toString());
 }
 
 function displayVideos(videos) {
+    videoListContainer.innerHTML = '';
     for (let i = 0; i < videos.length; i++) {
         const video = videos[i];
         const videoId = video.id.videoId;
@@ -64,16 +61,16 @@ function displayVideos(videos) {
         const videoHtml = `
             <div class="video-card">
                 <div class="video-thumbnail">
-                    <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">
-                        <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="${videoData.title}">
-                    </a>
+                    <iframe id="video-${videoId}" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+                    <div class="comment-overlay" id="overlay-${videoId}"></div>
                 </div>
                 <div class="video-info">
                     <h3>${videoData.title}</h3>
                     <p>${videoData.description}</p>
                     <p>👍 ${videoData.likeCount || 'N/A'} | 👀 ${videoData.viewCount || 'N/A'}</p>
                     <div class="comments-section">
-                        <textarea placeholder="コメントを追加"></textarea>
+                        <textarea id="comment-input-${videoId}" placeholder="コメントを追加"></textarea>
+                        <button onclick="submitComment('${videoId}')">送信</button>
                         <div class="comments-list" id="comments-${videoId}"></div>
                     </div>
                 </div>
@@ -85,7 +82,6 @@ function displayVideos(videos) {
 
 window.onload = loadVideos;
 
-// サービスワーカーの登録
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js')
         .then(registration => {
