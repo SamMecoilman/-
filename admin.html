@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理者用ページ</title>
+</head>
+<body>
+    <h1>動画のURLを追加</h1>
+    <div>
+        <label for="videoUrl">動画のURL：</label>
+        <input type="text" id="videoUrl">
+        <button onclick="addVideo()">動画を追加する</button>
+    </div>
+
+    <script>
+        function addVideo() {
+            var videoUrlInput = document.getElementById('videoUrl');
+            var videoUrl = videoUrlInput.value;
+            // 動画のURLをローカルストレージに保存
+            var videos = JSON.parse(localStorage.getItem('videos')) || [];
+            videos.push(videoUrl);
+            localStorage.setItem('videos', JSON.stringify(videos));
+            alert('動画が追加されました！');
+            videoUrlInput.value = ''; // フォームをクリア
+        }
+    </script>
+</body>
+</html>
