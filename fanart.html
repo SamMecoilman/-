@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ファンアートギャラリー</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="fanart.js" defer></script>
 </head>
 <body>
     <header>
+        <img src="image.png" alt="須藤近一の非日常" class="header-image">
         <h1>ファンアートギャラリー</h1>
         <nav>
             <ul>
@@ -18,16 +20,20 @@
         </nav>
     </header>
     <main>
-        <div class="gallery-container">
-            <div class="gallery-item">
-                <img src="art1.jpg" alt="Fan Art 1">
-                <p>Artist: User1</p>
-            </div>
-            <div class="gallery-item">
-                <img src="art2.jpg" alt="Fan Art 2">
-                <p>Artist: User2</p>
-            </div>
-            <!-- More gallery items here -->
+        <div class="upload-container">
+            <h2>ファンアートを投稿する</h2>
+            <form id="uploadForm">
+                <div class="drag-and-drop" id="dropZone">
+                    <p>ここにファイルをドラッグ＆ドロップ</p>
+                    <p>または</p>
+                    <input type="file" id="fileInput" multiple>
+                </div>
+                <textarea id="comment" placeholder="コメントを追加"></textarea>
+                <button type="submit">投稿する</button>
+            </form>
+        </div>
+        <div class="gallery-container" id="gallery">
+            <!-- アップロードされたファンアートがここに表示されます -->
         </div>
     </main>
 </body>
