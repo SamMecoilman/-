@@ -1,13 +1,13 @@
 const CACHE_NAME = 'video-app-cache-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/image.png',
-  '/manifest.json',
-  '/apple-touch-icon.png',
-  '/icon-192x192.png',
-  '/icon-512x512.png'
+  './',
+  './index.html',
+  './styles.css',
+  './image.png',
+  './manifest.json',
+  './apple-touch-icon.png',
+  './icon-192x192.png',
+  './icon-512x512.png'
 ];
 
 self.addEventListener('install', event => {
