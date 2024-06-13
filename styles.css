@@ -1,102 +1,74 @@
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
-header {
-    background-color: #333;
-    color: #fff;
-    width: 100%;
-    text-align: center;
-    position: relative;
-    margin-bottom: 20px;
-}
+
 .header-image {
     width: 100%;
-    max-height: 300px;
-    object-fit: cover;
+    height: auto;
 }
-main {
-    width: 100%;
-    max-width: 1200px;
-    padding: 1rem;
-    box-sizing: border-box;
-}
+
 .container {
-    background-color: #fff;
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
-h1 {
-    text-align: center;
-    margin-top: 0;
-    padding: 1rem 0;
+
+#news {
+    margin-bottom: 20px;
 }
-h2 {
-    border-bottom: 2px solid #333;
-    padding-bottom: 0.5rem;
-    margin-bottom: 1rem;
-}
+
 .video-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 20px;
 }
+
 .video-card {
     display: flex;
-    background-color: #fff;
+    flex-direction: row;
+    gap: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-.video-thumbnail {
-    flex: 0 0 200px;
+
+.video-thumbnail img {
+    width: 320px; /* 横長のサムネイルにする */
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
 }
-.video-thumbnail iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
+
 .video-info {
     flex: 1;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
 }
+
 .video-info h3 {
-    margin: 0.5rem 0;
-    font-size: 1.2rem;
+    margin: 0 0 10px;
 }
+
 .video-info p {
-    margin: 0.5rem 0;
-    color: #666;
+    margin: 0 0 5px;
 }
+
 .comments-section {
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: column;
+    margin-top: 10px;
 }
+
 .comments-section textarea {
     width: 100%;
-    padding: 0.5rem;
-    margin-bottom: 0.5rem;
+    height: 50px; /* コメント欄の高さを調整 */
+    resize: none;
     border: 1px solid #ccc;
     border-radius: 4px;
+    padding: 5px;
 }
+
 .comments-list {
-    max-height: 100px;
+    max-height: 100px; /* コメントリストの高さを調整 */
     overflow-y: auto;
-    border: 1px solid #ccc;
-    padding: 0.5rem;
-    border-radius: 4px;
-}
-.comments-list p {
-    margin: 0.5rem 0;
-    color: #333;
+    margin-top: 5px;
 }
