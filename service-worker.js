@@ -8,17 +8,27 @@ const urlsToCache = [
   '/apple-touch-icon.png',
   '/icon-192x192.png',
   '/icon-512x512.png'
-  // 必要な他のリソースをここに追加
 ];
 
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        return cache.addAll(urlsToCache);
+        return Promise.all(
+          urlsToCache.map(url => {
+            return fetch(url).then(response => {
+              if (!response.ok) {
+                throw new TypeError('Bad response status');
+              }
+              return cache.put(url, response);
+            }).catch(error => {
+              console.error(`Failed to cache ${url}:`, error);
+            });
+          })
+        );
       })
       .catch(error => {
-        console.error('Failed to cache resources:', error);
+        console.error('Failed to open cache:', error);
       })
   );
 });
