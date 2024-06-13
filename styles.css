@@ -93,4 +93,10 @@ h2 {
     max-height: 100px;
     overflow-y: auto;
     border: 1px solid #ccc;
-    padding: 0
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+.comments-list p {
+    margin: 0.5rem 0;
+    color: #333;
+}
