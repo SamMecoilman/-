@@ -16,8 +16,19 @@
             <p>ここにバナー広告を表示</p>
         </div>
         <div class="container">
+            <div id="news">
+                <h2>最新ニュース</h2>
+                <ul>
+                    <li>新しい動画が公開されました！</li>
+                    <li>ファンイベントが開催されます！</li>
+                </ul>
+            </div>
             <div id="videoList">
                 <!-- ここに動画が追加されます -->
+            </div>
+            <div id="comments">
+                <h2>コメントセクション</h2>
+                <div id="disqus_thread"></div>
             </div>
         </div>
         <div class="banner">
@@ -46,6 +57,20 @@
                 return null;
             }
         }
+
+        // Disqus コメントセクションの設定
+        var disqus_config = function () {
+            this.page.url = window.location.href;
+            this.page.identifier = window.location.pathname;
+        };
+
+        (function() {
+            var d = document, s = d.createElement('script');
+            s.src = 'https://YOUR_DISQUS_SHORTNAME.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
     </script>
+    <noscript>コメントを表示するにはJavaScriptを有効にしてください。</noscript>
 </body>
 </html>
