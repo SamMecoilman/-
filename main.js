@@ -1,5 +1,5 @@
 const apiKey = 'AIzaSyC1imLgoRZLRhBn5qFGMXbcpQUK5VEagzY';
-const channelId = 'UCSgIKM0G8Exo3UgZF0MAsdg'; // 新しいチャンネルID
+const channelId = 'UCSgIKM0G8Exo3UgZF0MAsdg'; // サムのヘタレ英雄譚のチャンネルID
 
 // YouTube Data APIを使ってチャンネルの動画の情報を取得する関数
 async function fetchChannelVideos() {
@@ -31,18 +31,29 @@ async function fetchVideoData(videoId) {
 const videoListContainer = document.getElementById('videoList');
 
 async function loadVideos() {
-    // ローカルストレージからキャッシュを取得
+    // キャッシュの有効期限を1日とする（ミリ秒）
+    const cacheExpirationTime = 24 * 60 * 60 * 1000;
+
     let cachedVideos = localStorage.getItem('cachedVideos');
-    if (cachedVideos) {
-        cachedVideos = JSON.parse(cachedVideos);
-        console.log('Using cached data');
-        displayVideos(cachedVideos);
-    } else {
-        const videos = await fetchChannelVideos();
-        displayVideos(videos);
-        // キャッシュをローカルストレージに保存
-        localStorage.setItem('cachedVideos', JSON.stringify(videos));
+    let cacheTimestamp = localStorage.getItem('cacheTimestamp');
+    
+    if (cachedVideos && cacheTimestamp) {
+        const currentTime = new Date().getTime();
+        const cacheAge = currentTime - parseInt(cacheTimestamp, 10);
+
+        if (cacheAge < cacheExpirationTime) {
+            cachedVideos = JSON.parse(cachedVideos);
+            console.log('Using cached data');
+            displayVideos(cachedVideos);
+            return;
+        }
     }
+
+    const videos = await fetchChannelVideos();
+    displayVideos(videos);
+    // キャッシュをローカルストレージに保存
+    localStorage.setItem('cachedVideos', JSON.stringify(videos));
+    localStorage.setItem('cacheTimestamp', new Date().getTime().toString());
 }
 
 function displayVideos(videos) {
