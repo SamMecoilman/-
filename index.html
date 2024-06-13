@@ -3,47 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Video Manager</title>
+    <title>動画一覧</title>
 </head>
 <body>
-    <h1>YouTube Video Manager</h1>
-    <!-- 管理者用のフォーム -->
-    <div>
-        <label for="videoUrl">動画のURL：</label>
-        <input type="text" id="videoUrl">
-        <button onclick="addVideo()">動画を追加する</button>
-    </div>
-
-    <!-- 動画一覧 -->
+    <h1>動画一覧</h1>
     <div id="videoList">
         <!-- ここに動画が追加されます -->
     </div>
 
     <script>
-        // 管理者が動画を追加する関数
-        function addVideo() {
-            var videoUrlInput = document.getElementById('videoUrl');
-            var videoUrl = videoUrlInput.value;
-
-            // 管理者かどうかの確認（ここでは簡略化のため、固定の管理者ユーザー名を設定しています）
-            var adminUsername = "admin";
-            var currentUser = prompt("管理者ユーザー名を入力してください:");
-
-            if (currentUser === adminUsername) {
-                // YouTubeの動画IDを取得
-                var videoId = getVideoIdFromUrl(videoUrl);
-                if (videoId) {
-                    // 動画を表示するためのHTMLを生成
-                    var videoHtml = '<iframe width="560" height="315" src="https://www.youtube.com/embed/' + videoId + '" frameborder="0" allowfullscreen></iframe>';
-                    // 動画を一覧に追加
-                    document.getElementById('videoList').innerHTML += videoHtml;
-                } else {
-                    alert("正しいYouTubeの動画URLを入力してください。");
-                }
-            } else {
-                alert("管理者権限が必要です。");
+        // ローカルストレージから動画のURLを取得して動画一覧を表示
+        var videos = JSON.parse(localStorage.getItem('videos')) || [];
+        var videoListContainer = document.getElementById('videoList');
+        videos.forEach(function(videoUrl) {
+            var videoId = getVideoIdFromUrl(videoUrl);
+            if (videoId) {
+                var videoHtml = '<iframe width="560" height="315" src="https://www.youtube.com/embed/' + videoId + '" frameborder="0" allowfullscreen></iframe>';
+                videoListContainer.innerHTML += videoHtml;
             }
-        }
+        });
 
         // YouTubeの動画URLから動画IDを抽出する関数
         function getVideoIdFromUrl(url) {
