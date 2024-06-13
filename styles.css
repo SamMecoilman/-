@@ -71,4 +71,7 @@ body {
     max-height: 100px; /* コメントリストの高さを調整 */
     overflow-y: auto;
     margin-top: 5px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 4px;
 }
