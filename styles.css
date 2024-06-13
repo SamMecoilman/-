@@ -1,5 +1,5 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
@@ -14,6 +14,7 @@ header {
     width: 100%;
     text-align: center;
     position: relative;
+    margin-bottom: 20px;
 }
 .header-image {
     width: 100%;
@@ -21,25 +22,12 @@ header {
     object-fit: cover;
 }
 main {
-    display: flex;
-    justify-content: center;
-    padding: 1rem;
     width: 100%;
+    max-width: 1200px;
+    padding: 1rem;
     box-sizing: border-box;
 }
-.banner {
-    background-color: #fff;
-    width: 15%;
-    min-width: 150px;
-    margin: 0 1rem;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
-    text-align: center;
-}
 .container {
-    max-width: 800px;
-    width: 60%;
     background-color: #fff;
     padding: 1rem;
     border-radius: 8px;
@@ -50,41 +38,42 @@ h1 {
     margin-top: 0;
     padding: 1rem 0;
 }
-h2, h3 {
+h2 {
     border-bottom: 2px solid #333;
     padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
 }
 .video-list {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1rem;
-    justify-content: center;
 }
 .video-card {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    padding: 1rem;
-    max-width: 400px;
-    text-align: left;
+    display: flex;
+    flex-direction: column;
 }
-.video-card h3 {
+.video-card iframe {
+    width: 100%;
+    height: 200px;
+    border: none;
+}
+.video-info {
+    padding: 0.5rem;
+}
+.video-info h3 {
     margin: 0.5rem 0;
+    font-size: 1.2rem;
 }
-.video-card p {
+.video-info p {
     margin: 0.5rem 0;
-}
-@media (max-width: 1200px) {
-    .container {
-        width: 70%;
-    }
-    .banner {
-        display: none; /* 小さい画面ではバナーを非表示にする */
-    }
+    color: #666;
 }
 @media (max-width: 600px) {
-    iframe {
-        height: 200px;
+    .video-card iframe {
+        height: 150px;
     }
 }
