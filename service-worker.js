@@ -18,7 +18,8 @@ self.addEventListener('install', event => {
           urlsToCache.map(url => {
             return fetch(url).then(response => {
               if (!response.ok) {
-                throw new TypeError('Bad response status');
+                console.error(`Failed to fetch ${url}: ${response.statusText}`);
+                return;
               }
               return cache.put(url, response);
             }).catch(error => {
