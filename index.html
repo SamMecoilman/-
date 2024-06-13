@@ -35,7 +35,7 @@
     <script>
         // YouTube Data APIを使って動画の情報を取得する関数
         async function fetchVideoData(videoId) {
-            const apiKey = 'YOUR_YOUTUBE_API_KEY'; // あなたのYouTube APIキーをここに入れます
+            const apiKey = 'AIzaSyDGKMTmXMWQWAIABQecXvfgAinHbG8_BpA'; // あなたのYouTube APIキーをここに入れます
             const apiUrl = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,statistics&key=${apiKey}`;
             const response = await axios.get(apiUrl);
             return response.data.items[0];
