@@ -53,13 +53,13 @@ async function loadVideos() {
         localStorage.setItem('cachedVideos', JSON.stringify(videos));
         localStorage.setItem('cacheTimestamp', new Date().getTime().toString());
     } else {
-        // 手動で追加された動画を表示する
         loadManualVideos();
     }
 }
 
 function displayVideos(videos) {
     videoListContainer.innerHTML = '';
+    manualVideoListContainer.style.display = 'none';
     for (let i = 0; i < videos.length; i++) {
         const video = videos[i];
         const videoId = video.id.videoId;
@@ -83,12 +83,12 @@ function displayVideos(videos) {
         `;
         videoListContainer.innerHTML += videoHtml;
     }
-    loadManualVideos();
 }
 
 async function loadManualVideos() {
     let manualVideos = JSON.parse(localStorage.getItem('manualVideos')) || [];
-    manualVideoListContainer.innerHTML = '';
+    videoListContainer.innerHTML = '';
+    manualVideoListContainer.style.display = 'block';
     for (let i = 0; i < manualVideos.length; i++) {
         const videoId = manualVideos[i];
         const videoData = await fetchVideoData(videoId);
