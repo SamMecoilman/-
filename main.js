@@ -69,4 +69,11 @@ function displayVideos(videos) {
                 <div class="video-thumbnail">
                     <iframe id="video-${videoId}" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
                     <div class="comment-overlay" id="overlay-${videoId}"></div>
-                </div
+                </div>
+                <div class="video-info">
+                    <h3>${videoData.title}</h3>
+                    <p>${videoData.description}</p>
+                    <p>👍 ${video.statistics.likeCount} | 👀 ${video.statistics.viewCount}</p>
+                    <div class="comments-section">
+                        <textarea placeholder="コメントを追加" data-video-id="${videoId}"></textarea>
+                        <
