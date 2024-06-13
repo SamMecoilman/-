@@ -89,4 +89,69 @@ function displayVideos(videos) {
 async function loadManualVideos() {
     let manualVideos = JSON.parse(localStorage.getItem('manualVideos')) || [];
     manualVideoListContainer.innerHTML = '';
-    for (let i = 0; i < manual
+    for (let i = 0; i < manualVideos.length; i++) {
+        const videoId = manualVideos[i];
+        const videoData = await fetchVideoData(videoId);
+        if (videoData) {
+            const videoHtml = `
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <iframe id="video-${videoId}" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+                        <div class="comment-overlay" id="overlay-${videoId}"></div>
+                    </div>
+                    <div class="video-info">
+                        <h3>${videoData.snippet.title}</h3>
+                        <p>${videoData.snippet.description}</p>
+                        <p>👍 ${videoData.statistics.likeCount} | 👀 ${videoData.statistics.viewCount}</p>
+                        <div class="comments-section">
+                            <textarea placeholder="コメントを追加" data-video-id="${videoId}"></textarea>
+                            <button onclick="addComment('${videoId}')">送信</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            manualVideoListContainer.innerHTML += videoHtml;
+        }
+    }
+}
+
+function addComment(videoId) {
+    const textarea = document.querySelector(`textarea[data-video-id="${videoId}"]`);
+    const comment = textarea.value;
+    if (comment) {
+        let comments = JSON.parse(localStorage.getItem(`comments-${videoId}`)) || [];
+        const timestamp = new Date().getTime();
+        comments.push({ comment, timestamp });
+        localStorage.setItem(`comments-${videoId}`, JSON.stringify(comments));
+        textarea.value = '';
+        displayComments(videoId);
+    }
+}
+
+function displayComments(videoId) {
+    const overlay = document.getElementById(`overlay-${videoId}`);
+    overlay.innerHTML = '';
+    let comments = JSON.parse(localStorage.getItem(`comments-${videoId}`)) || [];
+    comments.forEach(commentData => {
+        const commentElement = document.createElement('div');
+        commentElement.classList.add('comment');
+        commentElement.textContent = commentData.comment;
+        overlay.appendChild(commentElement);
+    });
+    startCommentAnimation(videoId);
+}
+
+function startCommentAnimation(videoId) {
+    const overlay = document.getElementById(`overlay-${videoId}`);
+    const comments = overlay.querySelectorAll('.comment');
+    comments.forEach(comment => {
+        comment.style.top = `${Math.random() * 80}%`;
+        comment.style.animationDuration = `${5 + Math.random() * 5}s`;
+        comment.style.animationDelay = `${Math.random() * 10}s`;
+        comment.classList.add('move');
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadVideos();
+});
