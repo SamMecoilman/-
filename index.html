@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>動画一覧</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <header>
@@ -23,12 +24,8 @@
                     <li>ファンイベントが開催されます！</li>
                 </ul>
             </div>
-            <div id="videoList">
+            <div id="videoList" class="video-list">
                 <!-- ここに動画が追加されます -->
-            </div>
-            <div id="comments">
-                <h2>コメントセクション</h2>
-                <div id="disqus_thread"></div>
             </div>
         </div>
         <div class="banner">
@@ -36,41 +33,40 @@
         </div>
     </main>
     <script>
+        // YouTube Data APIを使って動画の情報を取得する関数
+        async function fetchVideoData(videoId) {
+            const apiKey = 'YOUR_YOUTUBE_API_KEY'; // あなたのYouTube APIキーをここに入れます
+            const apiUrl = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,statistics&key=${apiKey}`;
+            const response = await axios.get(apiUrl);
+            return response.data.items[0];
+        }
+
         // ローカルストレージから動画のURLを取得して動画一覧を表示
-        var videos = JSON.parse(localStorage.getItem('videos')) || [];
-        var videoListContainer = document.getElementById('videoList');
-        videos.forEach(function(videoUrl) {
-            var videoId = getVideoIdFromUrl(videoUrl);
+        const videos = JSON.parse(localStorage.getItem('videos')) || [];
+        const videoListContainer = document.getElementById('videoList');
+
+        videos.forEach(async (videoUrl, index) => {
+            const videoId = getVideoIdFromUrl(videoUrl);
             if (videoId) {
-                var videoHtml = '<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/' + videoId + '" allowfullscreen></iframe></div>';
+                const videoData = await fetchVideoData(videoId);
+                const videoHtml = `
+                    <div class="video-card">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+                        <h3>${videoData.snippet.title}</h3>
+                        <p>${videoData.snippet.description}</p>
+                        <p>いいね: ${videoData.statistics.likeCount} | 再生回数: ${videoData.statistics.viewCount}</p>
+                    </div>
+                `;
                 videoListContainer.innerHTML += videoHtml;
             }
         });
 
         // YouTubeの動画URLから動画IDを抽出する関数
         function getVideoIdFromUrl(url) {
-            var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            var match = url.match(regExp);
-            if (match && match[2].length == 11) {
-                return match[2];
-            } else {
-                return null;
-            }
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
         }
-
-        // Disqus コメントセクションの設定
-        var disqus_config = function () {
-            this.page.url = window.location.href;
-            this.page.identifier = window.location.pathname;
-        };
-
-        (function() {
-            var d = document, s = d.createElement('script');
-            s.src = 'https://samu-no-hetare-eiyuu-tan.disqus.com/embed.js';
-            s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-        })();
     </script>
-    <noscript>コメントを表示するにはJavaScriptを有効にしてください。</noscript>
 </body>
 </html>
