@@ -4,7 +4,11 @@ const urlsToCache = [
   '/index.html',
   '/styles.css',
   '/image.png',
-  // 必要な他のリソース
+  '/manifest.json',
+  '/apple-touch-icon.png',
+  '/icon-192x192.png',
+  '/icon-512x512.png'
+  // 必要な他のリソースをここに追加
 ];
 
 self.addEventListener('install', event => {
@@ -12,6 +16,9 @@ self.addEventListener('install', event => {
     caches.open(CACHE_NAME)
       .then(cache => {
         return cache.addAll(urlsToCache);
+      })
+      .catch(error => {
+        console.error('Failed to cache resources:', error);
       })
   );
 });
@@ -24,6 +31,9 @@ self.addEventListener('fetch', event => {
           return response;
         }
         return fetch(event.request);
+      })
+      .catch(error => {
+        console.error('Failed to fetch resource:', error);
       })
   );
 });
