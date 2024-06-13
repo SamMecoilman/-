@@ -1,40 +1,35 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const manualUploadForm = document.getElementById('manualUploadForm');
-    const manualVideoList = document.getElementById('manualVideoList');
-
-    manualUploadForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const videoUrl = document.getElementById('manualVideoUrl').value;
-        const comment = document.getElementById('manualVideoComment').value;
-        if (videoUrl) {
-            addManualVideo(videoUrl, comment);
-            document.getElementById('manualVideoUrl').value = '';
-            document.getElementById('manualVideoComment').value = '';
-        }
-    });
-
-    function addManualVideo(videoUrl, comment) {
-        const videoId = extractVideoId(videoUrl);
-        if (videoId) {
-            const videoHtml = `
-                <div class="video-card">
-                    <div class="video-thumbnail">
-                        <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                    <div class="video-info">
-                        <p>${comment}</p>
-                    </div>
-                </div>
-            `;
-            manualVideoList.innerHTML += videoHtml;
-        } else {
-            alert('有効なYouTubeのURLを入力してください。');
-        }
-    }
-
-    function extractVideoId(url) {
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-        const match = url.match(regExp);
-        return (match && match[2].length == 11) ? match[2] : null;
-    }
-});
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理者用ページ</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="admin.js" defer></script>
+</head>
+<body>
+    <header>
+        <img src="image.png" alt="須藤近一の非日常" class="header-image">
+        <h1>管理者用ページ</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="fanart.html">ファンアートギャラリー</a></li>
+                <li><a href="contest.html">イラストコンテスト</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="upload-container">
+            <h2>動画を手動で追加</h2>
+            <form id="manualUploadForm">
+                <input type="text" id="manualVideoUrl" placeholder="動画のURLを入力">
+                <button type="submit">動画を追加</button>
+            </form>
+        </div>
+        <div class="container" id="manualVideoList">
+            <!-- 手動で追加された動画の一覧 -->
+        </div>
+    </main>
+</body>
+</html>
