@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>動画一覧</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="icon-512x512.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icon-16x16.png">
     <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline' 'unsafe-eval'; style-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; connect-src 'self' https://www.googleapis.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; img-src 'self' data:; connect-src 'self' https://www.googleapis.com;">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <header>
@@ -34,6 +34,73 @@
             </div>
         </div>
     </main>
-    <script src="main.js"></script>
+    <script>
+        const apiKey = 'AIzaSyDGKMTmXMWQWAIABQecXvfgAinHbG8_BpA';
+        const channelId = 'UCFj0mcjLB6uFuRko4fXh8GQ'; // サムのヘタレ英雄譚のチャンネルID
+
+        async function fetchChannelVideos() {
+            const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=20`;
+            try {
+                const response = await axios.get(apiUrl);
+                return response.data.items;
+            } catch (error) {
+                console.error('Error fetching channel videos:', error);
+                return [];
+            }
+        }
+
+        async function fetchVideoData(videoId) {
+            const apiUrl = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,statistics&key=${apiKey}`;
+            try {
+                const response = await axios.get(apiUrl);
+                return response.data.items[0];
+            } catch (error) {
+                console.error('Error fetching video data:', error);
+                return null;
+            }
+        }
+
+        const videoListContainer = document.getElementById('videoList');
+
+        async function loadVideos() {
+            const videos = await fetchChannelVideos();
+            for (let i = 0; i < videos.length; i++) {
+                const video = videos[i];
+                const videoId = video.id.videoId;
+                const videoData = await fetchVideoData(videoId);
+                if (videoData) {
+                    const videoHtml = `
+                        <div class="video-card">
+                            <div class="video-thumbnail">
+                                <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+                            </div>
+                            <div class="video-info">
+                                <h3>${videoData.snippet.title}</h3>
+                                <p>${videoData.snippet.description}</p>
+                                <p>👍 ${videoData.statistics.likeCount} | 👀 ${videoData.statistics.viewCount}</p>
+                                <div class="comments-section">
+                                    <textarea placeholder="コメントを追加"></textarea>
+                                    <div class="comments-list" id="comments-${videoId}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    videoListContainer.innerHTML += videoHtml;
+                }
+            }
+        }
+
+        window.onload = loadVideos;
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch(error => {
+                    console.error('Service Worker registration failed:', error);
+                });
+        }
+    </script>
 </body>
 </html>
