@@ -17,13 +17,15 @@ app.use(express.static('public'));
 const allowedOrigins = ['https://sammecoilman.github.io'];
 app.use(cors({
     origin: function (origin, callback) {
-        // サーバーのリクエストがホワイトリストに含まれているか確認
         if (!origin || allowedOrigins.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
         }
-    }
+    },
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type'],
+    credentials: true,
 }));
 
 const db = new sqlite3.Database(':memory:');
@@ -75,6 +77,7 @@ app.get('/api/videos', cacheMiddleware, async (req, res) => {
     const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=10&pageToken=${pageToken}`;
     try {
         const response = await axios.get(apiUrl);
+        res.setHeader('Access-Control-Allow-Origin', '*');
         res.status(200).send(response.data);
     } catch (error) {
         res.status(500).send('YouTube APIリクエストエラー');
@@ -87,6 +90,7 @@ app.get('/api/video', cacheMiddleware, async (req, res) => {
     const apiUrl = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,statistics&key=${apiKey}`;
     try {
         const response = await axios.get(apiUrl);
+        res.setHeader('Access-Control-Allow-Origin', '*');
         res.status(200).send(response.data);
     } catch (error) {
         res.status(500).send('YouTube APIリクエストエラー');
