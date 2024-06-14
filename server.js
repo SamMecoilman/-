@@ -7,6 +7,7 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// API
 const apiKey = process.env.API_KEY;
 const channelId = 'UCSgIKM0G8Exo3UgZF0MAsdg';
 
