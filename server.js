@@ -67,6 +67,18 @@ app.get('/api/videos', cacheMiddleware, async (req, res) => {
     }
 });
 
+// 動画データ取得用のエンドポイント
+app.get('/api/video', cacheMiddleware, async (req, res) => {
+    const videoId = req.query.id;
+    const apiUrl = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,statistics&key=${apiKey}`;
+    try {
+        const response = await axios.get(apiUrl);
+        res.status(200).send(response.data);
+    } catch (error) {
+        res.status(500).send('YouTube APIリクエストエラー');
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}/`);
 });
