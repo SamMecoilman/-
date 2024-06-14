@@ -67,6 +67,17 @@ function setupInfiniteScroll() {
     observer.observe(document.getElementById('video-container-end'));
 }
 
+// 既存のコードに追加
+function addCommentSystem(videoElement, videoId) {
+    const commentContainer = document.createElement('div');
+    commentContainer.classList.add('comment-container');
+    
+    const commentInput = document.createElement('input');
+    commentInput.type = 'text';
+    commentInput.placeholder = 'コメントを入力してください';
+    commentInput.classList.add('comment-input');
+    
+
 document.addEventListener('DOMContentLoaded', () => {
     loadVideos();
     setupInfiniteScroll();
