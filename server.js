@@ -6,7 +6,7 @@ const axios = require('axios');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const apiKey = 'AIzaSyDGKMTmXMWQWAIABQecXvfgAinHbG8_BpA';
+const apiKey = process.env.API_KEY;
 const channelId = 'UCSgIKM0G8Exo3UgZF0MAsdg';
 
 app.use(bodyParser.json());
