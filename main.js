@@ -2,7 +2,7 @@ let nextPageToken = '';
 let isLoading = false;
 
 async function fetchChannelVideos(pageToken = '') {
-    const apiUrl = `/api/videos?pageToken=${pageToken}`;
+    const apiUrl = `https://samu-no-hetare-eiyuu-tan.vercel.app/api/videos?pageToken=${pageToken}`;
     try {
         const response = await axios.get(apiUrl);
         nextPageToken = response.data.nextPageToken || '';
@@ -14,7 +14,7 @@ async function fetchChannelVideos(pageToken = '') {
 }
 
 async function fetchVideoData(videoId) {
-    const apiUrl = `/api/video?id=${videoId}`;
+    const apiUrl = `https://samu-no-hetare-eiyuu-tan.vercel.app/api/video?id=${videoId}`;
     try {
         const response = await axios.get(apiUrl);
         return response.data.items[0];
@@ -82,7 +82,7 @@ function addCommentSystem(videoElement, videoId) {
 
 async function postComment(videoId, comment) {
     try {
-        await axios.post('/comments', { videoId, comment });
+        await axios.post(`https://samu-no-hetare-eiyuu-tan.vercel.app/comments`, { videoId, comment });
     } catch (error) {
         console.error('コメントの投稿エラー:', error);
     }
@@ -90,7 +90,7 @@ async function postComment(videoId, comment) {
 
 async function loadComments(videoElement, videoId) {
     try {
-        const response = await axios.get(`/comments/${videoId}`);
+        const response = await axios.get(`https://samu-no-hetare-eiyuu-tan.vercel.app/comments/${videoId}`);
         const comments = response.data;
         const commentContainer = videoElement.querySelector('.comment-container');
         commentContainer.querySelectorAll('.comment').forEach(e => e.remove());
