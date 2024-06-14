@@ -1,4 +1,4 @@
-const apiKey = 'YOUR_API_KEY_HERE'; // Replace with your actual API key
+const apiKey = 'AIzaSyC1imLgoRZLRhBn5qFGMXbcpQUK5VEagzY';
 const channelId = 'UCSgIKM0G8Exo3UgZF0MAsdg'; // サムのヘタレ英雄譚のチャンネルID
 
 async function fetchChannelVideos() {
@@ -6,11 +6,11 @@ async function fetchChannelVideos() {
     try {
         const response = await axios.get(apiUrl);
         if (response.data.items.length === 0) {
-            console.warn('No videos found for the specified channel ID');
+            console.warn('指定されたチャンネルIDに動画が見つかりません');
         }
         return response.data.items;
     } catch (error) {
-        console.error('Error fetching channel videos:', error);
+        console.error('チャンネル動画の取得エラー:', error);
         return [];
     }
 }
@@ -21,7 +21,7 @@ async function fetchVideoData(videoId) {
         const response = await axios.get(apiUrl);
         return response.data.items[0];
     } catch (error) {
-        console.error('Error fetching video data:', error);
+        console.error('動画データの取得エラー:', error);
         return null;
     }
 }
@@ -29,7 +29,7 @@ async function fetchVideoData(videoId) {
 async function loadVideos() {
     const videos = await fetchChannelVideos();
     const videoContainer = document.getElementById('video-container');
-    videoContainer.innerHTML = ''; // Clear existing videos
+    videoContainer.innerHTML = ''; // 既存の動画をクリア
 
     for (const video of videos) {
         const videoData = await fetchVideoData(video.id.videoId);
@@ -47,7 +47,7 @@ function createVideoElement(video) {
         <h3>${video.snippet.title}</h3>
         <img src="${video.snippet.thumbnails.medium.url}" alt="${video.snippet.title}">
         <p>${video.snippet.description}</p>
-        <p>Views: ${video.statistics.viewCount}</p>
+        <p>再生回数: ${video.statistics.viewCount}</p>
     `;
     return videoElement;
 }
