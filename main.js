@@ -1,13 +1,13 @@
 const apiKey = 'AIzaSyDGKMTmXMWQWAIABQecXvfgAinHbG8_BpA';
-const channelId = 'UCSgIKM0G8Exo3UgZF0MAsdg'; // サムのヘタレ英雄譚のチャンネルID
+const channelId = 'UCSgIKM0G8Exo3UgZF0MAsdg';
+let nextPageToken = '';
+let isLoading = false;
 
-async function fetchChannelVideos() {
-    const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=10`;
+async function fetchChannelVideos(pageToken = '') {
+    const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=10&pageToken=${pageToken}`;
     try {
         const response = await axios.get(apiUrl);
-        if (response.data.items.length === 0) {
-            console.warn('指定されたチャンネルIDに動画が見つかりません');
-        }
+        nextPageToken = response.data.nextPageToken || '';
         return response.data.items;
     } catch (error) {
         console.error('チャンネル動画の取得エラー:', error);
@@ -27,10 +27,10 @@ async function fetchVideoData(videoId) {
 }
 
 async function loadVideos() {
-    const videos = await fetchChannelVideos();
+    if (isLoading) return;
+    isLoading = true;
+    const videos = await fetchChannelVideos(nextPageToken);
     const videoContainer = document.getElementById('video-container');
-    videoContainer.innerHTML = ''; // 既存の動画をクリア
-
     for (const video of videos) {
         const videoData = await fetchVideoData(video.id.videoId);
         if (videoData) {
@@ -38,6 +38,7 @@ async function loadVideos() {
             videoContainer.appendChild(videoElement);
         }
     }
+    isLoading = false;
 }
 
 function createVideoElement(video) {
@@ -52,4 +53,21 @@ function createVideoElement(video) {
     return videoElement;
 }
 
-document.addEventListener('DOMContentLoaded', loadVideos);
+function setupInfiniteScroll() {
+    const observer = new IntersectionObserver(async (entries) => {
+        if (entries[0].isIntersecting && nextPageToken) {
+            await loadVideos();
+        }
+    }, {
+        root: null,
+        rootMargin: '0px',
+        threshold: 1.0
+    });
+
+    observer.observe(document.getElementById('video-container-end'));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadVideos();
+    setupInfiniteScroll();
+});
