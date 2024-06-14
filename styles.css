@@ -64,6 +64,9 @@ main {
     text-align: center;
     padding: 10px;
     transition: transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .video:hover {
@@ -74,17 +77,22 @@ main {
     width: 100%;
     height: auto;
     border-bottom: 1px solid #ddd;
+    flex-shrink: 0;
 }
 
 .video h3 {
     font-size: 1.2em;
     margin: 10px 0;
+    height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .video p {
     color: #555;
     font-size: 0.9em;
     margin: 5px 0;
+    flex-shrink: 0;
 }
 
 /* Responsive Design */
