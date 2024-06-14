@@ -1,4 +1,4 @@
-const apiKey = 'AIzaSyC1imLgoRZLRhBn5qFGMXbcpQUK5VEagzY';
+const apiKey = 'AIzaSyDGKMTmXMWQWAIABQecXvfgAinHbG8_BpA';
 const channelId = 'UCSgIKM0G8Exo3UgZF0MAsdg'; // サムのヘタレ英雄譚のチャンネルID
 
 async function fetchChannelVideos() {
