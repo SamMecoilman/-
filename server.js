@@ -3,6 +3,7 @@ const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
 const NodeCache = require('node-cache');
 const axios = require('axios');
+const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -11,6 +12,19 @@ const channelId = 'UCSgIKM0G8Exo3UgZF0MAsdg';
 
 app.use(bodyParser.json());
 app.use(express.static('public'));
+
+// CORS設定
+const allowedOrigins = ['https://sammecoilman.github.io'];
+app.use(cors({
+    origin: function (origin, callback) {
+        // サーバーのリクエストがホワイトリストに含まれているか確認
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    }
+}));
 
 const db = new sqlite3.Database(':memory:');
 const apiCache = new NodeCache({ stdTTL: 600 }); // 10 minutes TTL
